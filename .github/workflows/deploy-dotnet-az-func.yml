@@ -20,6 +20,11 @@ on:
         required: true
         type: string
 
+      workflow-name:
+        description: "file name of the workflow calling this template"
+        required: true
+        type: string
+
       staging-slot-name:
         description: "Optional deployment to staging slot"
         required: false
@@ -34,7 +39,7 @@ env:
 
 jobs:
   build_test:
-    uses: ./.github/workflows/dotnet-build-test.yml
+    uses: ./.github/workflows/${{ inputs.workflow-name }}.yml
     with:
       dotnet-version: ${{ inputs.dotnet-version }}
       project-path: ${{ inputs.project-path }}
