@@ -20,11 +20,6 @@ on:
         required: true
         type: string
 
-      workflow-name:
-        description: "file name of the workflow calling this template"
-        required: true
-        type: string
-
       staging-slot-name:
         description: "Optional deployment to staging slot"
         required: false
