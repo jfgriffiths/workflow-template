@@ -34,7 +34,7 @@ env:
 
 jobs:
   build_test:
-    uses: ./.github/workflows/github-action-workflow.yml
+    uses: ./.github/workflows/dotnet-build-test.yml
     with:
       dotnet-version: ${{ inputs.dotnet-version }}
       project-path: ${{ inputs.project-path }}
