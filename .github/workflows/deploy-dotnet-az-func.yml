@@ -39,7 +39,7 @@ env:
 
 jobs:
   build_test:
-    uses: ./.github/workflows/${{ inputs.workflow-name }}.yml
+    uses: ./.github/workflows/github-action-workflow.yml
     with:
       dotnet-version: ${{ inputs.dotnet-version }}
       project-path: ${{ inputs.project-path }}
