@@ -1,0 +1,68 @@
+name: Build and Test .NET Project
+run-name: Build and Test ${{ inputs.project-path }}
+
+on:
+  workflow_call:
+    inputs:
+      dotnet-version:
+        description: ".NET version"
+        required: false
+        default: "10.0.x"
+        type: string
+
+      project-path:
+        description: "path to .csproj"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-build
+          path: |
+            **/bin/Release/**
+            **/obj/Release/**
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-build
+          path: .
+
+      - name: Test
+        run: dotnet test --no-build --configuration Release --verbosity normal
